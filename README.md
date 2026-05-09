@@ -26,6 +26,14 @@ g7fx_signal_app/
 
 ---
 
+
+## Documentation
+
+- [Project Overview](PROJECT_OVERVIEW.md)
+- [Run Guide & Signal Setup](RUN_AND_SIGNALS.md)
+
+---
+
 ## Quick Start
 
 ### 1. Install dependencies
