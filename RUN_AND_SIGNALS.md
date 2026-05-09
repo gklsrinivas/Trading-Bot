@@ -1,95 +1,160 @@
-# Run Guide & Signal Delivery
+# Run Guide (Beginner Friendly)
 
-This guide shows exactly how to run the bot and where signals appear.
+If you are new to coding, follow this document **top to bottom**. Do not skip steps.
 
-## 1) Prerequisites
+---
 
-- Python 3.10+
-- `pip`
-- OANDA API credentials (**only** for live mode)
+## What you need before starting
 
-## 2) Install dependencies
+1. A computer with internet.
+2. This project folder downloaded (or cloned) to your computer.
+3. Python 3.10 or newer installed.
+4. (Optional for live mode) OANDA practice account + API key.
+
+> Demo mode does **not** need OANDA credentials.
+
+---
+
+## Step 1 — Open terminal in this project folder
+
+You should be inside the folder that contains `main.py`.
+
+- Example folder name: `Trading-Bot`
+
+---
+
+## Step 2 — Create and activate a virtual environment
+
+A virtual environment avoids system Python errors and is recommended for everyone.
+
+### macOS / Linux
 
 ```bash
-pip install oandapyV20 pandas numpy
+python3 -m venv .venv
+source .venv/bin/activate
 ```
 
-## 3) Quick test (demo mode)
+### Windows (PowerShell)
 
-Demo mode uses synthetic candles and is the safest way to validate setup.
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### Windows (Command Prompt / CMD)
+
+```cmd
+py -m venv .venv
+.venv\Scripts\activate.bat
+```
+
+If activation worked, you will usually see `(.venv)` at the start of your terminal line.
+
+---
+
+## Step 3 — Install required packages
+
+Run this after the environment is active:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install pandas numpy oandapyV20
+```
+
+---
+
+## Step 4 — Run in demo mode (first run)
 
 ```bash
 python main.py --demo
 ```
 
-Expected result:
-- You will see Stage 1 → Stage 2 → Stage 3 evaluation output in terminal.
-- If all filters pass, a final signal is printed and logged.
+What you should see:
+- Stage-by-stage analysis output.
+- Final signal decision (`emitted`, `suppressed`, or `no-trade`).
 
-## 4) Configure live mode
+If this works, your installation is correct.
 
-Open `config/settings.py` and set:
+---
 
-- `OANDA_API_KEY = "..."`
-- `OANDA_ACCOUNT_ID = "..."`
-- `OANDA_ENVIRONMENT = "practice"` (recommended first)
+## Step 5 — (Optional) Configure live/practice mode
 
-Also review these risk controls before going live:
+Open `config/settings.py` and update:
+
+- `OANDA_API_KEY`
+- `OANDA_ACCOUNT_ID`
+- `OANDA_ENVIRONMENT = "practice"` (recommended)
+
+Also review risk settings before live usage:
 - `ACCOUNT_RISK_PERCENT`
 - `DRAWDOWN_WARN_PCT`
 - `DRAWDOWN_PAUSE_PCT`
 - `DRAWDOWN_CLOSE_PCT`
 
-## 5) Start live mode
+---
+
+## Step 6 — Start live/practice run
 
 ```bash
 python main.py --balance 10000
 ```
 
-`--balance` initializes the drawdown tracker baseline.
+This keeps running and evaluates data continuously.
 
-## 6) How to get signals
+---
 
-Signals can be consumed in 3 ways:
+## Step 7 — How to receive signals
 
-### A. Terminal (immediate)
-- Live and demo runs both print signal decisions directly in console.
+You can get signals in 3 places:
 
-### B. Log file (persistent)
-Default log file: `g7fx_signals.log`
+1. **Terminal output** (instant)
+2. **Log file** `g7fx_signals.log` (saved history)
+3. **Email/Webhook alerts** (if enabled)
 
+To watch the log in real time:
+
+### macOS / Linux
 ```bash
 tail -f g7fx_signals.log
 ```
 
-### C. Alerts (email/webhook)
-In `config/settings.py`:
+### Windows PowerShell
+```powershell
+Get-Content .\g7fx_signals.log -Wait
+```
 
-- Email:
-  - `ALERT_EMAIL_ENABLED = True`
-  - Fill SMTP host, port, user, password, from/to addresses.
-- Webhook:
-  - `ALERT_WEBHOOK_ENABLED = True`
-  - Set `ALERT_WEBHOOK_URL` (Discord/Slack/custom endpoint).
+To enable alerts, edit `config/settings.py`:
+- Email: set `ALERT_EMAIL_ENABLED = True` and fill SMTP fields.
+- Webhook: set `ALERT_WEBHOOK_ENABLED = True` and set `ALERT_WEBHOOK_URL`.
 
-When a qualified signal is emitted, `alerts/dispatcher.py` sends it through enabled channels.
+---
 
-## 7) Why you might not see frequent signals
+## Common issues and quick fixes
 
-No signal is expected when any gate fails, for example:
-- Balanced/indecisive AMT context,
-- Weak or missing confluence,
-- Risk/reward below minimum,
-- Order-flow proxy conflict,
-- Drawdown pause active,
-- Time filter/kill-zone restrictions.
+### `pip: command not found`
+Use:
+```bash
+python3 -m pip --version
+```
+or on Windows:
+```powershell
+py -m pip --version
+```
 
-This is intentional signal filtering, not necessarily a runtime error.
+### `externally-managed-environment`
+You are installing globally. Use the virtual environment steps above.
 
-## 8) Practical startup checklist
+### `ModuleNotFoundError: pandas` (or similar)
+Your environment is not active or dependencies were not installed there.
+Re-activate `.venv` and run install again.
 
-1. Run demo mode once and confirm stage output is visible.
-2. Add OANDA credentials and keep environment on `practice`.
-3. Enable webhook alerts and verify receipt.
-4. Start live mode with conservative risk settings.
-5. Monitor `g7fx_signals.log` during London/NY sessions.
+---
+
+## First-time checklist (non-technical)
+
+- [ ] I opened terminal in the project folder.
+- [ ] I created `.venv`.
+- [ ] I activated `.venv`.
+- [ ] I installed packages with `python -m pip ...`.
+- [ ] I ran `python main.py --demo` successfully.
+- [ ] I can see output in terminal and/or `g7fx_signals.log`.
