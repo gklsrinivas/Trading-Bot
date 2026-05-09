@@ -1,0 +1,8 @@
+2026-05-05 03:44:48,837 | WARNING  | root | oandapyV20 not installed. Run: pip install oandapyV20
+2026-05-05 03:45:15,125 | WARNING  | root | oandapyV20 not installed. Run: pip install oandapyV20
+2026-05-05 03:45:15,153 | INFO     | core.stage1_amt | Stage 1 | state=imbalanced | dom=balanced | migration=bearish | open=inside_va | bias=short | score=25
+2026-05-05 03:45:15,156 | INFO     | core.stage2_hypothesis | Confluence zone found | short | 153.665 | levels=['Anchored VWAP', 'Curr POC'] | score=20
+2026-05-05 03:45:15,157 | INFO     | core.stage2_hypothesis | Stage 2 hypothesis built | short | entry=153.718 | SL=153.850 | TP1=153.991 | R:R=2.06
+2026-05-05 03:45:15,162 | INFO     | core.stage3_orderflow | Footprint proxy: EXHAUSTION at high
+2026-05-05 03:45:15,162 | INFO     | core.stage3_orderflow | Stage 3 | CD=confirms | FP=exhaustion | score=20
+2026-05-05 03:45:15,162 | INFO     | core.risk_engine | ✅ SIGNAL | USD_JPY short | entry=153.718 | SL=153.850 | TP1=153.991 | TP2=153.190 | score=75 (MEDIUM) | lots=0.01
